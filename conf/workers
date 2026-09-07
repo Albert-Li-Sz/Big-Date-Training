@@ -1,0 +1,2 @@
+# 伪分布式：只在本机上运行（由 Hadoop 3.3.6 自带 workers 默认内容确认）
+localhost

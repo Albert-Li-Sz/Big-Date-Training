@@ -1,0 +1,40 @@
+# 大数据实训环境：Ubuntu 24.04 + OpenJDK 8 + Hadoop 3.3.6(伪分布式) + Spark 3.5.1
+# 依据 PPT/Class1 课程教程制作（仅参考 Ubuntu 虚拟机内的配置）
+name: hadoop-spark
+
+services:
+  bigdata:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        UBUNTU_VERSION: "24.04"
+    image: bdt-hadoop-spark:3.3.6-3.5.1
+    container_name: hadoop-spark
+    hostname: hadoop
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    ports:
+      - "127.0.0.1:2222:22"     # SSH（主机 2222 -> 容器 22）
+      - "127.0.0.1:9000:9000"   # HDFS RPC
+      - "127.0.0.1:9870:9870"   # HDFS NameNode Web UI
+      - "127.0.0.1:8088:8088"   # YARN ResourceManager Web UI
+      - "127.0.0.1:8042:8042"   # YARN NodeManager Web UI
+      - "127.0.0.1:4040:4040"   # Spark UI（运行 Spark 应用时）
+      - "127.0.0.1:8888:8888"   # Jupyter Notebook（可选）
+    volumes:
+      - namenode-data:/usr/local/hadoop/data/namenode
+      - datanode-data:/usr/local/hadoop/data/datanode
+    mem_limit: 4g
+    stop_grace_period: 60s
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS --max-time 5 http://localhost:9870/ >/dev/null && curl -fsS --max-time 5 http://localhost:8088/ >/dev/null"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 90s
+
+volumes:
+  namenode-data:
+  datanode-data:
