@@ -11,6 +11,8 @@ services:
         UBUNTU_VERSION: "24.04"
     image: ${BIGDATA_IMAGE:-ghcr.io/albert-li-sz/big-date-training:3.3.6-3.5.1}
     pull_policy: missing
+    environment:
+      ROOT_PASSWORD: ${ROOT_PASSWORD:-root}
     container_name: hadoop-spark
     hostname: hadoop
     restart: unless-stopped

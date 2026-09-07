@@ -94,8 +94,7 @@ RUN printf '%s\n' \
       'export PATH=$JAVA_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$SPARK_HOME/bin:$SPARK_HOME/sbin:$PATH' \
     >> /root/.bashrc
 
-RUN echo 'root:root' | chpasswd \
- && sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config \
+RUN sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config \
  && sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config \
  && install -d -m 700 /run/sshd /root/.ssh \
  && rm -f /etc/ssh/ssh_host_* /root/.ssh/id_rsa /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys \

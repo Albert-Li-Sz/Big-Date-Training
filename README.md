@@ -16,12 +16,16 @@
 ### 使用已发布镜像（推荐）
 
 ```bash
+cp .env.example .env
+# 编辑 .env，设置 ROOT_PASSWORD
 docker compose pull
 docker compose up -d
 ```
 
 已发布镜像：`ghcr.io/albert-li-sz/big-date-training:3.3.6-3.5.1`（支持 `linux/amd64` 和 `linux/arm64`）。
 发行版页面：<https://github.com/Albert-Li-Sz/Big-Date-Training/releases>
+
+`.env` 与 `docker-compose.yml` 位于同一目录。Compose 会读取 `.env` 中的 `ROOT_PASSWORD`，容器每次启动时更新 root SSH 密码；`.env` 已加入 Git 忽略，不会上传到仓库。未设置时默认密码为 `root`，仅适合本地课程环境。
 
 ### 本地构建
 
@@ -75,7 +79,7 @@ docker exec -it hadoop-spark bash -lc 'source /root/ai_env/bin/activate && jupyt
 ## 四、SSH 登录（教程 05 的远程连接）
 
 ```bash
-ssh root@localhost -p 2222     # 密码 root
+ssh root@localhost -p 2222     # 密码为 .env 中的 ROOT_PASSWORD
 ```
 
 端口默认只绑定到宿主机 `127.0.0.1`，避免课程环境中的 root SSH 和管理界面暴露到局域网。SSH 密钥在容器首次启动时生成，不会写入公开镜像；`root/root` 仅适合本地课程环境，切勿将端口暴露到公网。

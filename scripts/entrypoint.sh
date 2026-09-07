@@ -31,9 +31,19 @@ prepare_ssh() {
   chmod 600 /root/.ssh/authorized_keys
 }
 
+configure_root_password() {
+  root_password="${ROOT_PASSWORD:-root}"
+  if [[ "$root_password" == *$'\n'* || "$root_password" == *$'\r'* ]]; then
+    echo 'ROOT_PASSWORD must not contain newline characters' >&2
+    exit 1
+  fi
+  printf 'root:%s\n' "$root_password" | chpasswd
+}
+
 trap 'stop_services; exit 0' TERM INT
 
 echo ">> [1/4] starting sshd ..."
+configure_root_password
 prepare_ssh
 service ssh start >/dev/null 2>&1 || /usr/sbin/sshd
 
