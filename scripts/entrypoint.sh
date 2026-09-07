@@ -17,10 +17,24 @@ stop_services() {
   stop-dfs.sh 2>/dev/null || true
 }
 
+prepare_ssh() {
+  install -d -m 700 /run/sshd /root/.ssh
+  ssh-keygen -A >/dev/null 2>&1 || true
+  if [ ! -f /root/.ssh/id_rsa ]; then
+    ssh-keygen -q -t rsa -N '' -f /root/.ssh/id_rsa
+  fi
+  touch /root/.ssh/authorized_keys
+  public_key="$(cat /root/.ssh/id_rsa.pub)"
+  if ! grep -Fqx "$public_key" /root/.ssh/authorized_keys; then
+    printf '%s\n' "$public_key" >> /root/.ssh/authorized_keys
+  fi
+  chmod 600 /root/.ssh/authorized_keys
+}
+
 trap 'stop_services; exit 0' TERM INT
 
 echo ">> [1/4] starting sshd ..."
-mkdir -p /run/sshd
+prepare_ssh
 service ssh start >/dev/null 2>&1 || /usr/sbin/sshd
 
 for attempt in $(seq 1 30); do

@@ -9,7 +9,8 @@ services:
       dockerfile: Dockerfile
       args:
         UBUNTU_VERSION: "24.04"
-    image: bdt-hadoop-spark:3.3.6-3.5.1
+    image: ${BIGDATA_IMAGE:-ghcr.io/albert-li-sz/big-date-training:3.3.6-3.5.1}
+    pull_policy: missing
     container_name: hadoop-spark
     hostname: hadoop
     restart: unless-stopped

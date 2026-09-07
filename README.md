@@ -13,6 +13,18 @@
 
 ## 一、构建镜像
 
+### 使用已发布镜像（推荐）
+
+```bash
+docker compose pull
+docker compose up -d
+```
+
+已发布镜像：`ghcr.io/albert-li-sz/big-date-training:3.3.6-3.5.1`（支持 `linux/amd64` 和 `linux/arm64`）。
+发行版页面：<https://github.com/Albert-Li-Sz/Big-Date-Training/releases>
+
+### 本地构建
+
 ```bash
 docker compose build
 ```
@@ -66,7 +78,7 @@ docker exec -it hadoop-spark bash -lc 'source /root/ai_env/bin/activate && jupyt
 ssh root@localhost -p 2222     # 密码 root
 ```
 
-端口默认只绑定到宿主机 `127.0.0.1`，避免课程环境中的 root SSH 和管理界面暴露到局域网。
+端口默认只绑定到宿主机 `127.0.0.1`，避免课程环境中的 root SSH 和管理界面暴露到局域网。SSH 密钥在容器首次启动时生成，不会写入公开镜像；`root/root` 仅适合本地课程环境，切勿将端口暴露到公网。
 
 ## 五、常用管理命令
 
