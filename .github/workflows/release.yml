@@ -1,0 +1,86 @@
+name: Release container image
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push multi-platform image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/albert-li-sz/big-date-training:${{ github.ref_name }}
+            ghcr.io/albert-li-sz/big-date-training:3.3.6-3.5.1
+            ghcr.io/albert-li-sz/big-date-training:latest
+          labels: |
+            org.opencontainers.image.title=Hadoop 3.3.6 + Spark 3.5.1 Training Environment
+            org.opencontainers.image.description=Ubuntu 24.04 teaching image with Java 8, Hadoop 3.3.6, and Spark 3.5.1
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.version=${{ github.ref_name }}
+            org.opencontainers.image.licenses=MIT
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: false
+          sbom: false
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            --verify-tag \
+            --title "Hadoop 3.3.6 + Spark 3.5.1 ($GITHUB_REF_NAME)" \
+            --notes-file - <<'EOF'
+          首个容器发行版，适用于本地大数据课程实训。
+
+          ## 组件
+
+          - Ubuntu 24.04
+          - Java 8（Ubuntu 软件源）
+          - Hadoop 3.3.6 伪分布式环境
+          - Spark / PySpark 3.5.1
+          - Jupyter、Streamlit、pandas、scikit-learn、jieba
+          - `linux/amd64` 与 `linux/arm64`
+
+          ## 启动
+
+          ```bash
+          cp .env.example .env
+          # 编辑 .env 中的 ROOT_PASSWORD
+          docker compose pull
+          docker compose up -d
+          ```
+
+          镜像：`ghcr.io/albert-li-sz/big-date-training:3.3.6-3.5.1`
+
+          > 该镜像包含允许 root 登录的 SSH 教学配置，端口默认仅绑定 `127.0.0.1`，请勿直接暴露到公网。
+          EOF

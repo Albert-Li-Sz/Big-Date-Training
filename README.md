@@ -25,6 +25,8 @@ docker compose up -d
 已发布镜像：`ghcr.io/albert-li-sz/big-date-training:3.3.6-3.5.1`（支持 `linux/amd64` 和 `linux/arm64`）。
 发行版页面：<https://github.com/Albert-Li-Sz/Big-Date-Training/releases>
 
+每次推送 `v*` Git 标签时，[发布工作流](.github/workflows/release.yml) 会自动构建双架构镜像、推送到 GHCR，并创建对应的 GitHub Release。
+
 `.env` 与 `docker-compose.yml` 位于同一目录。Compose 会读取 `.env` 中的 `ROOT_PASSWORD`，容器每次启动时更新 root SSH 密码；`.env` 已加入 Git 忽略，不会上传到仓库。未设置时默认密码为 `root`，仅适合本地课程环境。
 
 ### 本地构建
