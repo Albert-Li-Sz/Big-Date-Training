@@ -140,12 +140,27 @@ RUN chmod 755 ${SPARK_HOME}/conf/spark-env.sh \
       'export YARN_NODEMANAGER_USER=root' \
     >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh
 
+COPY requirements-course-projects.txt /tmp/course-project-requirements.txt
+
 RUN python3 -m venv /root/ai_env \
  && /root/ai_env/bin/python -m pip install --no-cache-dir --upgrade pip \
  && /root/ai_env/bin/python -m pip install --no-cache-dir \
       -i https://mirrors.aliyun.com/pypi/simple/ \
       --trusted-host mirrors.aliyun.com \
-      pyspark==3.5.1 jieba pandas scikit-learn streamlit jupyter
+      -r /tmp/course-project-requirements.txt \
+      streamlit jupyter \
+ && rm -f /tmp/course-project-requirements.txt
+
+ENV PATH=/root/ai_env/bin:$PATH
+
+RUN /root/ai_env/bin/python -m pip install --no-cache-dir \
+      -i https://mirrors.aliyun.com/pypi/simple/ \
+      --trusted-host mirrors.aliyun.com \
+      setuptools==75.8.2
+
+RUN printf '%s\n' 'export PATH=/root/ai_env/bin:$PATH' > /etc/profile.d/ai-env.sh \
+ && chmod 755 /etc/profile.d/ai-env.sh \
+ && printf '%s\n' 'export PATH=/root/ai_env/bin:$PATH' >> /root/.bashrc
 
 COPY scripts/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod 755 /usr/local/bin/entrypoint.sh

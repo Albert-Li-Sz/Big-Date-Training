@@ -1,117 +1,51 @@
-# Hadoop 3.3.6 + Spark 3.5.1 伪分布式大数据环境 (Ubuntu 24.04)
+# 大数据与 AI 课程作业
 
-依据 `PPT/Class1` 课程教程（仅参考 Ubuntu 虚拟机内的配置，忽略宿主机/桌面本地配置）制作：
+工作区已经按课程进度整理，并统一使用 `day1/hadoop-spark-docker` 构建的本地镜像运行。
 
-| 教程 | 内容 | 镜像中的实现 |
-|---|---|---|
-| 03.切换软件源 | apt 换阿里云源 | `/etc/apt/sources.list.d/ubuntu.sources`（DEB822，阿里云） |
-| 05.安装openssh-server | ssh + 免密登录 | `openssh-server` + `ssh-keygen` 免密登录 localhost |
-| 06.安装并配置Java | OpenJDK 8（Ubuntu 24.04 软件源） | `/usr/local/java` |
-| 07.Hadoop伪分布式部署 | Hadoop 3.3.6 | `/usr/local/hadoop`（core/hdfs/mapred/yarn-site.xml） |
-| 08.安装部署Spark | Spark 3.5.1 + ai_env | `/usr/local/spark` + `/root/ai_env`（pyspark==3.5.1 等） |
-| 11.补充安装jupyter | jupyter | 已随 `ai_env` 安装 |
+## 目录
 
-## 一、构建镜像
+```text
+bdt/
+├── day1/
+│   ├── hadoop-spark-docker/   # Ubuntu 24.04 + Hadoop 3.3.6 + Spark 3.5.1 镜像
+│   └── PPT/                   # 昨天的课程资料与任务
+├── day2/
+│   ├── 学生项目任务书：基于大数据+AI的简历-岗位人才匹配系统.pdf
+│   └── resume_matching_project/  # 完整人岗匹配系统、报告与答辩 PPT
+└── day2-3/
+    ├── 文本匹配小案例一…四.pdf
+    └── text-matching/         # 四份讲义的 35 个可运行案例
+```
 
-### 使用已发布镜像（推荐）
+## 一键验证
+
+首次下载项目：
 
 ```bash
-cp .env.example .env
-# 编辑 .env，设置 ROOT_PASSWORD
-docker compose pull
+git clone https://github.com/Albert-Li-Sz/Big-Date-Training.git
+cd Big-Date-Training
+```
+
+在仓库根目录执行：
+
+```bash
+cd day1/hadoop-spark-docker
+docker compose build bigdata
 docker compose up -d
+
+# day2：本地算法 + HDFS + PySpark + MLlib
+docker compose exec -T bigdata bash -lc \
+  'cd /workspace/resume_matching_project && python run_pipeline.py --with-hdfs'
+
+# day2-3：按讲义顺序运行全部 35 个案例
+docker compose exec -T bigdata bash -lc \
+  'cd /workspace/text-matching && python run_all.py'
+
+# day2：启动可视化界面
+docker compose exec bigdata bash -lc \
+  'cd /workspace/resume_matching_project && streamlit run app.py'
 ```
 
-已发布镜像：`ghcr.io/albert-li-sz/big-date-training:3.3.6-3.5.1`（支持 `linux/amd64` 和 `linux/arm64`）。
-发行版页面：<https://github.com/Albert-Li-Sz/Big-Date-Training/releases>
+界面地址为 <http://localhost:8888>，HDFS 为 <http://localhost:9870>，YARN 为 <http://localhost:8088>。
 
-每次推送 `v*` Git 标签时，[发布工作流](.github/workflows/release.yml) 会自动构建双架构镜像、推送到 GHCR，并创建对应的 GitHub Release。
-
-`.env` 与 `docker-compose.yml` 位于同一目录。Compose 会读取 `.env` 中的 `ROOT_PASSWORD`，容器每次启动时更新 root SSH 密码；`.env` 已加入 Git 忽略，不会上传到仓库。未设置时默认密码为 `root`，仅适合本地课程环境。
-
-### 本地构建
-
-```bash
-docker compose build
-```
-
-> 下载源：Hadoop/Spark 来自华为云镜像，apt 和 PyPI 来自阿里云。Java 8 使用 Ubuntu 24.04 的 `openjdk-8-jdk-headless`，会按目标架构自动安装。
-
-> Spark 3.5.1 支持 Java 8/11/17；Java 8 低于 8u371 时会出现弃用提示。本镜像选择 Ubuntu 提供的 Java 8 更新版本，以保证 Ubuntu 24.04 的 amd64/arm64 原生构建。
-
-支持 `linux/amd64` 和 `linux/arm64`。Dockerfile 会按架构选择阿里云的 Ubuntu 镜像路径，以及 Hadoop 对应的二进制包。
-
-## 二、启动项目
-
-```bash
-docker compose up -d
-docker compose ps          # 等待 health 变为 healthy
-```
-
-## 三、验证
-
-```bash
-# 1. 查看 Hadoop 进程（应为 NameNode/DataNode/SecondaryNameNode/ResourceManager/NodeManager 5 个）
-docker exec hadoop-spark jps
-
-# 2. Web 界面
-#    HDFS:  http://localhost:9870
-#    YARN:  http://localhost:8088
-#    NodeManager: http://localhost:8042
-
-# 3. HDFS 读写测试
-docker exec hadoop-spark hdfs dfs -mkdir -p /test
-docker exec hadoop-spark hdfs dfs -ls /
-
-# 4. PySpark 本地模式（教程 08 步骤 5）
-docker exec -it hadoop-spark bash -lc 'source /root/ai_env/bin/activate && $SPARK_HOME/bin/pyspark --master local[*]'
-
-# 5. PySpark YARN 模式（教程 08 集群模式）
-docker exec hadoop-spark bash -lc 'source /root/ai_env/bin/activate && python -c "
-from pyspark.sql import SparkSession
-s = SparkSession.builder.master(\"yarn\").appName(\"pyspark-yarn-test\").getOrCreate()
-print(\"Spark version:\", s.version, \"-> counts:\", s.range(10).count())
-s.stop()"'
-
-# 6. Jupyter（可选；该命令前台运行）
-docker exec -it hadoop-spark bash -lc 'source /root/ai_env/bin/activate && jupyter notebook --ip=0.0.0.0 --no-browser --allow-root'
-# 浏览器访问 http://localhost:8888 ，token 见容器输出
-```
-
-## 四、SSH 登录（教程 05 的远程连接）
-
-```bash
-ssh root@localhost -p 2222     # 密码为 .env 中的 ROOT_PASSWORD
-```
-
-端口默认只绑定到宿主机 `127.0.0.1`，避免课程环境中的 root SSH 和管理界面暴露到局域网。SSH 密钥在容器首次启动时生成，不会写入公开镜像；`root/root` 仅适合本地课程环境，切勿将端口暴露到公网。
-
-## 五、常用管理命令
-
-```bash
-docker compose logs -f bigdata   # 查看启动日志
-docker exec -it hadoop-spark bash
-
-# 停止（entrypoint 会先停 YARN 再停 HDFS）
-docker compose down
-# 连同数据卷一起删除（重新格式化 NameNode）
-docker compose down -v
-```
-
-## 六、目录结构
-
-```
-hadoop-spark-docker/
-├── Dockerfile            # 镜像构建（基于 ubuntu:24.04）
-├── docker-compose.yml    # 单节点伪分布式集群
-├── README.md
-├── conf/                 # Hadoop / Spark 配置文件
-│   ├── core-site.xml     # fs.defaultFS=hdfs://localhost:9000
-│   ├── hdfs-site.xml     # dfs.replication=1
-│   ├── mapred-site.xml   # mapreduce.framework.name=yarn
-│   ├── yarn-site.xml     # aux-services=mapreduce_shuffle
-│   ├── workers           # localhost
-│   └── spark-env.sh
-└── scripts/
-    └── entrypoint.sh     # sshd -> format -> start-dfs.sh -> start-yarn.sh
-```
+详细说明分别见 [day1 镜像环境](day1/hadoop-spark-docker/README.md)、[day2 完整项目](day2/resume_matching_project/README.md) 与 [day2-3 文本匹配案例](day2-3/text-matching/README.md)。

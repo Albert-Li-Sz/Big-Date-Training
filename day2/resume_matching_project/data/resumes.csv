@@ -1,0 +1,13 @@
+resume_id,name,education,major,skills,experience_years,city,expected_salary,certificates,project_experience,self_description
+R001,陈晨,本科,数据科学与大数据技术,Python;PySpark;Spark;SQL;Pandas;Tableau,1.2,南昌,6500,英语四级;计算机二级,完成零售销售数据清洗与可视化平台并使用 Spark SQL 分析千万级订单,喜欢用数据发现业务问题并能独立完成分析报告
+R002,李浩,本科,软件工程,Java;Spring Boot;MySQL;Redis;Git;Docker,1.5,杭州,8500,英语四级,开发校园二手交易后端并设计 REST 接口与 Redis 缓存,关注后端工程质量和数据库性能
+R003,王雪,本科,数据科学与大数据技术,Hadoop;Spark;Hive;HBase;Scala;Linux,1.0,南昌,7200,英语四级,搭建 Hadoop 高可用集群并完成 Hive 离线数仓分层,希望从事大数据平台开发
+R004,赵磊,大专,云计算技术,Docker;Kubernetes;Linux;Shell;Prometheus,2.0,深圳,9500,CKA,部署容器化微服务并建设 Prometheus 监控告警,擅长 Linux 故障定位和自动化运维
+R005,周敏,硕士,人工智能,Python;PyTorch;NLP;Scikit-learn;Pandas,1.0,上海,11000,英语六级,使用 BERT 完成中文评论情感分类并进行模型评估,研究方向为自然语言处理与推荐系统
+R006,吴迪,本科,应用统计学,Python;SQL;Excel;Power BI;SPSS,0.8,南昌,6000,英语四级,制作经营驾驶舱并分析用户留存与渠道转化,善于把统计结论转成业务建议
+R007,郑宇,本科,计算机科学与技术,C++;Python;OpenCV;PyTorch;Linux,1.3,北京,10000,英语四级,训练目标检测模型识别道路缺陷并完成推理优化,对计算机视觉工程化有兴趣
+R008,孙悦,大专,软件技术,HTML;CSS;JavaScript;Vue;Git,1.0,九江,6500,计算机二级,实现校园活动管理前端和移动端自适应页面,注重界面可用性与组件复用
+R009,黄杰,本科,网络工程,Linux;Shell;Docker;MySQL;Nginx,2.0,南昌,7800,红帽认证,维护实验室服务器并编写备份与巡检脚本,具备网络和系统运维实践
+R010,林琳,本科,信息管理与信息系统,Python;SQL;Excel;Tableau;Scrapy,0.6,杭州,7500,英语四级,采集公开商品信息并制作价格趋势分析看板,沟通能力好且能快速理解业务指标
+R011,刘洋,硕士,计算机科学与技术,Python;TensorFlow;NLP;BERT;Docker,1.8,深圳,11500,英语六级,构建问答意图识别服务并使用 Docker 完成部署,有算法实验与服务化落地经验
+R012,徐静,本科,数据科学与大数据技术,Python;Spark;Hive;SQL;Airflow;Git,1.4,上海,9500,英语四级,基于 Airflow 调度 Spark ETL 并建设主题数据集市,重视数据质量和任务稳定性

@@ -1,0 +1,13 @@
+job_id,job_title,company,required_education,required_skills,min_experience_years,city,salary,preferred_certificates,job_description
+J001,大数据开发实习生,江西云数科技,本科,Python;Spark;Hadoop;Hive;SQL,1.0,南昌,7200,英语四级,参与离线数仓和 Spark 数据处理任务开发并维护 Hadoop 集群作业
+J002,数据分析实习生,洪城零售集团,本科,Python;SQL;Excel;Power BI,0.5,南昌,6200,,负责销售与会员数据分析并制作经营报表和可视化看板
+J003,Java 后端实习生,杭州智联科技,本科,Java;Spring Boot;MySQL;Redis;Git,1.0,杭州,8800,英语四级,开发业务接口并完成数据库设计缓存优化和单元测试
+J004,云平台运维工程师,深湾云计算,大专,Linux;Docker;Kubernetes;Shell;Prometheus,2.0,深圳,9800,CKA,负责容器平台发布监控告警和常见故障自动化处理
+J005,NLP 算法实习生,上海语智科技,硕士,Python;PyTorch;NLP;BERT,1.0,上海,11500,英语六级,开展文本分类和语义匹配实验并推动模型上线
+J006,BI 数据分析师,九江智造集团,本科,SQL;Excel;Tableau;Power BI,1.0,九江,7200,,建设生产经营指标体系并交付可交互分析看板
+J007,计算机视觉实习生,北京图灵视觉,本科,Python;OpenCV;PyTorch;Linux,1.0,北京,10500,英语四级,训练和优化工业缺陷检测模型并进行部署验证
+J008,前端开发实习生,九江数创网络,大专,JavaScript;Vue;HTML;CSS;Git,0.5,九江,6800,计算机二级,完成数据产品前端页面组件开发和响应式适配
+J009,数据平台运维工程师,江西数据中心,大专,Linux;Shell;Docker;Hadoop;MySQL,1.0,南昌,8000,红帽认证,维护数据平台服务器数据库和 Hadoop 服务稳定性
+J010,爬虫与数据采集工程师,杭州星图数据,本科,Python;Scrapy;SQL;Git,0.5,杭州,7800,英语四级,开发合规数据采集任务并完成清洗入库与质量监控
+J011,机器学习工程实习生,深圳未来智能,硕士,Python;TensorFlow;Scikit-learn;Docker,1.0,深圳,10800,英语六级,完成机器学习模型训练评估和容器化服务部署
+J012,数据仓库开发工程师,上海数航科技,本科,Spark;Hive;SQL;Airflow;Python,1.0,上海,9800,英语四级,建设主题数据仓库并开发稳定可追踪的 ETL 调度任务

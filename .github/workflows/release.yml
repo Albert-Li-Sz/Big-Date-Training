@@ -33,7 +33,7 @@ jobs:
       - name: Build and push multi-platform image
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: ./day1/hadoop-spark-docker
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
@@ -60,7 +60,7 @@ jobs:
             --verify-tag \
             --title "Hadoop 3.3.6 + Spark 3.5.1 ($GITHUB_REF_NAME)" \
             --notes-file - <<'EOF'
-          首个容器发行版，适用于本地大数据课程实训。
+          适用于本地大数据与 AI 课程实训的容器环境。
 
           ## 组件
 
@@ -68,12 +68,13 @@ jobs:
           - Java 8（Ubuntu 软件源）
           - Hadoop 3.3.6 伪分布式环境
           - Spark / PySpark 3.5.1
-          - Jupyter、Streamlit、pandas、scikit-learn、jieba
+          - Jupyter、Streamlit、pandas、scikit-learn、jieba、gensim
           - `linux/amd64` 与 `linux/arm64`
 
           ## 启动
 
           ```bash
+          cd day1/hadoop-spark-docker
           cp .env.example .env
           # 编辑 .env 中的 ROOT_PASSWORD
           docker compose pull

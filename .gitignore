@@ -1,2 +1,21 @@
+# Local configuration
 .env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+
+# OS and Python caches
 .DS_Store
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Temporary document renders and generated model artifacts
+/tmp/
+.artifacts/
+.codex-document-review/
+.codex-presentation/
+.chart-data-*/
+hdfs_download/

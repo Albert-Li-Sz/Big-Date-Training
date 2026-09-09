@@ -29,6 +29,8 @@ services:
     volumes:
       - namenode-data:/usr/local/hadoop/data/namenode
       - datanode-data:/usr/local/hadoop/data/datanode
+      - ../../day2/resume_matching_project:/workspace/resume_matching_project
+      - ../../day2-3/text-matching:/workspace/text-matching
     mem_limit: 4g
     stop_grace_period: 60s
     healthcheck:

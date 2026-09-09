@@ -1,0 +1,13 @@
+[theme]
+base = "light"
+primaryColor = "#2457E6"
+backgroundColor = "#F6F8FB"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#12233F"
+font = "sans serif"
+
+[server]
+headless = true
+address = "0.0.0.0"
+port = 8888
+fileWatcherType = "poll"

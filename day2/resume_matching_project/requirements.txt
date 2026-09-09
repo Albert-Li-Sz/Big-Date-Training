@@ -1,0 +1,9 @@
+gensim==4.3.3
+jieba==0.42.1
+numpy>=1.26,<2.0
+pandas>=2.2,<3.0
+scikit-learn>=1.5,<2.0
+scipy>=1.13,<1.14
+setuptools==75.8.2
+pyspark==3.5.1
+streamlit>=1.36,<2.0

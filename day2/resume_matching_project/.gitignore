@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.artifacts/
+hdfs_download/
+output/*.csv
+!output/.gitkeep
+.streamlit/secrets.toml
+.codex-document-review/
+.codex-presentation/
+.chart-data-*/
